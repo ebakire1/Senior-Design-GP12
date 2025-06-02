@@ -5,7 +5,7 @@
 #include <SPI.h>         
 #include <SD.h>
 #include <driver/i2s.h>  
-#include <mbedtls/base64.h> // Re-enabled for STT JSON building
+#include <mbedtls/base64.h> 
 #include <cctype>
 
 // ───────────── Wi-Fi ─────────────
@@ -150,7 +150,7 @@ void recordToRaw_STT() {
 }
 
 void buildJsonOnSD_STT() {
-  Serial.println("\n📦 Building STT JSON payload to " STT_JSON_FILE);
+  Serial.println("\n Building STT JSON payload to " STT_JSON_FILE);
   File raw = SD.open(STT_RAW_FILE, FILE_READ);
   if (!raw) {
     Serial.println("❌ STT: raw open failed for JSON build");
@@ -188,7 +188,7 @@ void buildJsonOnSD_STT() {
 }
 
 String sendJsonFile_STT() {
-  Serial.println("\n🚀 Sending " STT_JSON_FILE " to Google STT");
+  Serial.println("\n Sending " STT_JSON_FILE " to Google STT");
   String extracted_destination = "";
 
   File js = SD.open(STT_JSON_FILE, FILE_READ);
@@ -228,12 +228,12 @@ String sendJsonFile_STT() {
         Serial.println(transcript);
         extracted_destination = extractDestination_STT(transcript);
         if (extracted_destination.length() > 0) {
-          Serial.println("🚀 Destination (from STT): " + extracted_destination);
+          Serial.println(" Destination (from STT): " + extracted_destination);
         } else {
-          Serial.println("⚠️ Invalid input – must start with “directions ” or no destination found.");
+          Serial.println(" Invalid input – must start with “directions ” or no destination found.");
         }
       } else {
-        Serial.println("⚠️ No transcript found in STT JSON response.");
+        Serial.println("No transcript found in STT JSON response.");
       }
     }
   } else {
@@ -587,10 +587,10 @@ void setup() {
   }
   
   secureClient.setInsecure(); 
-  Serial.println(F("🔒 WiFiClientSecure configured for insecure connections."));
+  Serial.println(F(" WiFiClientSecure configured for insecure connections."));
 
   // 2. Initialize SD Card
-  Serial.println(F("💾 Initializing SD Card..."));
+  Serial.println(F("Initializing SD Card..."));
   if (!SD.begin(SD_CARD_CS_PIN)) { 
     Serial.println(F("❌ SD Card Mount Failed! Check wiring, card presence, and formatting (FAT32). Halting."));
     while (1) delay(1000);
@@ -604,7 +604,7 @@ void setup() {
   #if defined(AMP_SD_PIN) 
     pinMode(AMP_SD_PIN, OUTPUT);
     digitalWrite(AMP_SD_PIN, LOW); 
-    Serial.printf("🎤 Amplifier SD Pin (%d) set LOW (disabled for mic recording).\n", AMP_SD_PIN);
+    Serial.printf(" Amplifier SD Pin (%d) set LOW (disabled for mic recording).\n", AMP_SD_PIN);
   #endif
 
   recordToRaw_STT();
@@ -626,7 +626,7 @@ void setup() {
       digitalWrite(AMP_SD_PIN, HIGH); 
       Serial.printf("🔊 Amplifier SD Pin (%d) set HIGH (enabled for TTS playback).\n", AMP_SD_PIN);
     #else
-      Serial.println(F("⚠️ Amplifier SD Pin control not defined. Ensure MAX98357A SD pin is managed correctly for sound."));
+      Serial.println(F(" Amplifier SD Pin control not defined. Ensure MAX98357A SD pin is managed correctly for sound."));
     #endif
     
     processNavigationAndTTS(destinationFromSTT);
@@ -639,7 +639,7 @@ void setup() {
     Serial.println(F("--- Navigation & Text-to-Speech Phase Complete ---"));
 
   } else {
-    Serial.println(F("\n⚠️ No valid destination obtained from STT. Skipping navigation and TTS."));
+    Serial.println(F("\n No valid destination obtained from STT. Skipping navigation and TTS."));
   }
   
   Serial.println(F("\n Program finished. Entering idle loop."));
